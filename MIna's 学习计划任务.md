@@ -1,7 +1,7 @@
 2020.2.19
 一个mysql专栏pdf
 3道剑指offer
-3道新的面经题
+3道不会的面经题，查找资料学习
 看一下ReentrantLock的常用方法
 1个Java demo
 
