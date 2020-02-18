@@ -1,15 +1,18 @@
-
+2020.2.19
+一个mysql专栏pdf
+3道剑指offer
+3道新的面经题
+看一下ReentrantLock的常用方法
+1个Java demo
 
 2020.2.18
-一个mysql专栏pdf
 看下MySQL-20讲的幻读
-重写昨日面经题+3道新的面经题
-5-8道剑指offer
-看一下ReentrantLock的常用方法
+4道剑指offer
+重写昨日面经题+文件IO
 
 2020.2.17
 一个mysql专栏pdf
-5-8道剑指offer
+6道剑指offer
 做5道面经题
 
 2020.2.16
