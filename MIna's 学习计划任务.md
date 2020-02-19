@@ -1,9 +1,14 @@
+2020.2.20
+做完mysql专栏23的笔记
+3道面经题
+4个Java demo
+
 2020.2.19
-一个mysql专栏pdf
 3道剑指offer
-3道不会的面经题，查找资料学习
+5道不会的面经题，查找资料学习
 看一下ReentrantLock的常用方法
-1个Java demo
+4个Java demo
+一个mysql专栏pdf：23
 
 2020.2.18
 看下MySQL-20讲的幻读
