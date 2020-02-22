@@ -1,7 +1,17 @@
+2020.2.22
+3道面经
+mysql专栏24主备一致
+JDK源码（ThreadPoolExecutor）
+看一部分CS-Note的Java并发
+
+2020.2.21
+2道面经题（1道计网）
+1个Java Demo + JDK源码解读(CountDownLatch+AQS中的doAcquireShare)
+
 2020.2.20
 做完mysql专栏23的笔记
 3道面经题
-4个Java demo
+2个Java demo
 
 2020.2.19
 3道剑指offer
