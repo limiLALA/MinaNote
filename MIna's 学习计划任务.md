@@ -1,11 +1,62 @@
-2020.2.29
+### CS-Note剑指Offer没做过的
+60. n 个骰子的点数
 
+口述一个算法
 JDK源码（HashMap，HashSet，CopyOnWriteList）
+JDK源码（concurrentHashMap）3：扩容、计数（参考小曦曦的笔记）
+消息队列如何用在项目中
+
+2020.3.9
+脑科学报告
+看B站spring框架教程[AOP切片编程]
+回看一下CS-Note剑指offer五道题题解
+JDK源码（CopyOnWriteArrayList）2
+
+2020.3.8
+单例7个demo
+3道面经
+投简历
+
+2020.3.7
+回看一下CS-Note剑指offer五道题题解（看到62. 圆圈中最后剩下的数）
+1道面经
+
+2020.3.6
+看B站spring框架教程（7、8）
+非经典计算、脑科学作业
+
+2020.3.5
+复习Tomcat部署操作
+2道面经
+看B站spring框架教程（2、3、4）
+
+2020.3.4
+聊天机器人项目Web部署
+Tomcat部署+Spring MVC框架简单实操
+
+2020.3.3
+回看一下CS-Note剑指offer十道题题解（看到57.2 和为 S 的连续正数序列）
+3道面经
+JDK源码（CopyOnWriteArrayList）1
+
+2020.3.2
+回看一下CS-Note剑指offer二道题题解（看到49. 丑数）
+测试Linux的标准输入输出流：scanf、printf的原理
+
+2020.3.1
+回看一下CS-Note剑指offer六道题题解（看到47. 礼物的最大价值）
+3道面经
+StringPoolDemo
+完善简历
+
+2020.2.29
+回看一下CS-Note剑指offer十道题题解（看到41.2 字符流中第一个不重复的字符）
+2道面经
+JDK源码（concurrentHashMap）2：get、tabAt、部分扩容
 
 2020.2.28
-回看一下CS-Note剑指offer十道题题解
-2道面经
-JDK源码（concurrentHashMap）
+3道面经
+JDK源码（concurrentHashMap）1：initTable、putVal
 
 2020.2.27
 回看一下CS-Note剑指offer十一道题题解（看到32.3 按之字形顺序打印二叉树）

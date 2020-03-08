@@ -40,9 +40,9 @@ SIZECTL = U.objectFieldOffset
 思路：
 1. 若表空，先初始化；
 2. 若要插入的位置为空桶，就用CAS添加新的键值对到空桶；
-3. 若是转发节点（哈希值是MOVED(-1)，转发节点的哈希），执行helpTransfer方法。如果正在进行扩容，先执行扩容；
+3. 若是转发节点（哈希值=MOVED(-1)，转发节点的哈希），执行helpTransfer方法。如果正在进行扩容，先执行扩容；
 5. 若是一条链表（哈希值是非负数），执行针对链表的插入操作。在第一个for循环内的最后，如果桶数目大于树化阈值，要进行树化操作；
-6. 若是红黑树（哈希值小于-1），执行红黑树的插入操作；
+6. 若是红黑树（哈希值=TREEBIN(-2)），执行红黑树的插入操作；
 7. 如果有旧值，就返回旧值；否则，添加哈希表的元素数目，检查是否达到扩容条件，最后返回null。
 ```Java
 /*
@@ -63,12 +63,12 @@ final V putVal(K key, V value, boolean onlyIfAbsent) {
                 break;                   // no lock when adding to empty bin //添加到空桶中时，不用锁。如果CAS失败就从头再来
         }
         else if ((fh = f.hash) == MOVED)//转发节点的哈希
-            tab = helpTransfer(tab, f);//如果还在进行扩容操作就先扩容
+            tab = helpTransfer(tab, f);//如果还在进行扩容操作就加入一起扩容
         else {
             V oldVal = null;
             synchronized (f) {//用f对象加锁
-                if (tabAt(tab, i) == f) {//再次检查i处得引用是否还是f
-                    if (fh >= 0) {//首节点的哈希值是非负数，说明这里不是红黑树
+                if (tabAt(tab, i) == f) {//再次用volatile读 检查i处的引用是否还是f
+                    if (fh >= 0) {//首节点的哈希值是非负数，说明这里不是红黑树等特殊节点
                         binCount = 1;//头结点是一个非空桶，桶数目加一
                         for (Node<K,V> e = f;; ++binCount) {//遍历链表
                             K ek;
@@ -114,5 +114,126 @@ final V putVal(K key, V value, boolean onlyIfAbsent) {
     return null;
 }
 ```
-
+```Java
+casTabAt(tab, i, null, new Node<K,V>(hash, key, value, null));
+casTabAt(Node<K,V>[] tab, int i, Node<K,V> c, Node<K,V> v);
+static final <K,V> boolean casTabAt(Node<K,V>[] tab, int i,
+                                    Node<K,V> c, Node<K,V> v) {
+    return U.compareAndSwapObject(tab, ((long)i << ASHIFT) + ABASE, c, v);
+}
+```
 ### get
+get操作是无锁的，但是实现了多线程下的数据可见性：
+1. value的volatile声明保证值的可见性
+2. next的volatile声明保住next引用的可见性
+3. tabAt方法使用本地方法的volatile读获取Object
+```Java
+/**
+ * 返回key映射的value，如果不存在key的映射，返回null
+ * 如果存在这样的k，有key.equals(k)，返回k映射的v。
+ * 最多只能有一个这样的映射
+ *
+ * @throws NullPointerException if the specified key is null
+ * 参数key为null，抛出空指针异常
+ */
+public V get(Object key) {
+    Node<K,V>[] tab; Node<K,V> e, p; int n, eh; K ek;
+    int h = spread(key.hashCode());//扩散键的hash
+    if ((tab = table) != null && (n = tab.length) > 0 &&
+        (e = tabAt(tab, (n - 1) & h)) != null) {//表不空 and 通过tabAt的volatile读得到非空桶
+        if ((eh = e.hash) == h) {//哈希值相同，说明该位置是一个有效Node
+            if ((ek = e.key) == key || (ek != null && key.equals(ek)))//key相同
+                return e.val;
+        }
+        else if (eh < 0)//转发节点(-1)/红黑树(-2)/暂存节点(-3)
+            return (p = e.find(h, key)) != null ? p.val : null;//调用对应子类(ForwardingNode/TreeNode/ReservationNode)重写的父类(Node)的find()
+        while ((e = e.next) != null) {//遍历链表
+            if (e.hash == h &&
+                ((ek = e.key) == key || (ek != null && key.equals(ek))))
+                return e.val;
+        }
+    }
+    return null;
+}
+```
+```Java
+/**
+ * Key-value entry.  This class is never exported out as a
+ * user-mutable Map.Entry (i.e., one supporting setValue; see
+ * MapEntry below), but can be used for read-only traversals used
+ * in bulk tasks.  Subclasses of Node with a negative hash field
+ * are special, and contain null keys and values (but are never
+ * exported).  Otherwise, keys and vals are never null.
+ * 键值项。hash和key都是不可变的，只有value和next可变.
+ * 如果hash是负数，说明这是一个特殊的节点，key和value可为空；其他情况均不允许为null。
+ */
+static class Node<K,V> implements Map.Entry<K,V> {
+    final int hash;
+    final K key;
+    volatile V val;
+    volatile Node<K,V> next;
+
+    Node(int hash, K key, V val, Node<K,V> next) {
+        this.hash = hash;
+        this.key = key;
+        this.val = val;
+        this.next = next;
+    }
+
+    public final K getKey()       { return key; }
+    public final V getValue()     { return val; }
+    public final int hashCode()   { return key.hashCode() ^ val.hashCode(); }
+    public final String toString(){ return key + "=" + val; }
+    public final V setValue(V value) {
+        throw new UnsupportedOperationException();
+    }
+
+    public final boolean equals(Object o) {
+        Object k, v, u; Map.Entry<?,?> e;
+        return ((o instanceof Map.Entry) &&
+                (k = (e = (Map.Entry<?,?>)o).getKey()) != null &&
+                (v = e.getValue()) != null &&
+                (k == key || k.equals(key)) &&
+                (v == (u = val) || v.equals(u)));
+    }
+
+    /**
+     * Virtualized support for map.get(); overridden in subclasses.
+     * 为get方法提供支持；该方法在子类(如TreeNode)中会被重写
+     */
+    Node<K,V> find(int h, Object k) {//为链表类型写的find
+        Node<K,V> e = this;
+        if (k != null) {
+            do {
+                K ek;
+                if (e.hash == h &&
+                    ((ek = e.key) == k || (ek != null && k.equals(ek))))
+                    return e;
+            } while ((e = e.next) != null);
+        }
+        return null;
+    }
+}
+```
+##### 桶对象的物理定位
+哈希桶数组对象的首地址：tab；
+桶元素的偏移量：```((long)i << ASHIFT) + ABASE```。
+>在64位系统中，每个地址都是64位的数值，因此要把i强制转换为long型。
+ABASE是哈希桶数组对象的对象头所占内存空间大小。
+pow(2, ASHIFT)表示每个桶元素所占内存空间的大小，左移相当于乘以pow(2, ASHIFT)
+
+```Java
+Class<?> ak = Node[].class;//哈希桶数组类
+ABASE = U.arrayBaseOffset(ak);//真正的数组基址相对于Node[]数组对象首地址的物理偏移量（即堆中数组对象头的大小）
+int scale = U.arrayIndexScale(ak);//数组中相邻索引元素间的物理间隔（一个Node引用所占的内存大小）
+if ((scale & (scale - 1)) != 0)//大小必须是2的幂次，直接用移位操作即可获取指定索引处的物理地址，提高寻址效率
+    throw new Error("data type scale not a power of two");
+//numberOfLeadingZeros获取到scale从高位开始连续位为0的个数
+ASHIFT = 31 - Integer.numberOfLeadingZeros(scale);//实则就是得到log2(scale)
+```
+###### tabAt的实现
+```Java
+static final <K,V> Node<K,V> tabAt(Node<K,V>[] tab, int i) {//得到对应对象的引用
+    return (Node<K,V>)U.getObjectVolatile(tab, ((long)i << ASHIFT) + ABASE);
+}
+```
