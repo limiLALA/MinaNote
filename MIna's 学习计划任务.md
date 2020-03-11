@@ -5,12 +5,23 @@
 JDK源码（HashMap，HashSet，CopyOnWriteList）
 JDK源码（concurrentHashMap）3：扩容、计数（参考小曦曦的笔记）
 消息队列如何用在项目中
+看B站spring框架教程[AOP切片编程]
+JDK源码（CopyOnWriteArrayList）2
+3道面经
+查阅资料：零拷贝/怎么降低拷贝的开销
+源码：Object中的函数（equals、hashCode、toString等）
+
+2020.3.11
+3道面经
+描述快排
+Java I/O笔记
+
+2020.3.10
+Java I/O学习
 
 2020.3.9
 脑科学报告
-看B站spring框架教程[AOP切片编程]
-回看一下CS-Note剑指offer五道题题解
-JDK源码（CopyOnWriteArrayList）2
+回看一下CS-Note剑指offer六道题题解（看到68. 树中两个节点的最低公共祖先）[KO]
 
 2020.3.8
 单例7个demo
