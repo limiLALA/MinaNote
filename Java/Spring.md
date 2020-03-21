@@ -50,20 +50,28 @@ public class MyBeanFactory{
 ```
 
 ## Bean种类
-### 普通Bean
+### 按用途分
+#### 普通Bean
 spring直接创建A对象。
 ```XML
 <bean id="" class=""></bean>
 ```
 
-### FactoryBean
+#### FactoryBean
 需要实现FactoryBean接口，其中包含getObject方法。  
-spring创建FB的实例fb，在使用时需要调用fb.getObject来获取特定对象实例。  
+spring创建FB的实例fb，在使用时getBean("fb")会调用fb.getObject来获取特定对象实例，而不会返回fb这个对象。  
 这是一种代理的思想，不直接创建A对象，而是通过工厂Bean来获取对象。  
 ```XML
-<bean id="" class="FB"></bean>
+<bean id="fb" class="FB"></bean>
 ```
 
 >##### FactoryBean与BeanFactory
-* BeanFactory：用于创建Bean的工厂
+* BeanFactory：用于创建Bean的工厂，也就是IOC容器或对象工厂，所有的bean都是由BeanFactory（IOC容器）管理，包括FactoryBean也是由BeanFactory管理。
 * FactoryBean：用于代理创建实例对象的工厂Bean
+
+### 按生命周期分
+#### singleton单例
+在spring一开始运行就创建好相应的对象
+
+#### prototype原型
+只有在调用getBean的时候才会创建对象，而且每次都会创建新的对象
