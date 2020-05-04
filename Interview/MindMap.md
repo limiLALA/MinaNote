@@ -64,10 +64,17 @@
 				直接判空，不加锁，不处理并发
 				单层加锁
 
+Cookie、Session->Token->CSRF->XSS->验证登录信息：
+	->Spring拦截器，检查username、pw能否匹配
+		->成功，生成新的Session对象->如何反复使用Session对象->ThreadLocal、ThreadLocalMap使用前提：处理同类型的不同业务必须是不同线程
+如果是服务集群，用反向代理做负载均衡->sticky session
+
 ### Java并发
 -> 可见性 -> volatile -> 缓存一致性
 -> 原子性 -> synchronize
 -> 重排序 -> synchronize
+
+多线程->线程池
 
 ### OS
 ###### 进程与线程
