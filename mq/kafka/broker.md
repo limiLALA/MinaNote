@@ -20,3 +20,7 @@ HW由ISR中最大的LEO决定
 partition会在zookeeper上注册一个临时节点。
 不同的broker都会监听该节点。
 partition宕机，那么节点就会删除，broker会感知到，从而开始选举partition的leader
+
+## partition选主
+同样利用zookeeper的临时节点
+不同的broker在zookeeper上尝试创建一个临时节点，利用zookeeper的强一致性，创建成功的就成为leader

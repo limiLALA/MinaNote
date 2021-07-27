@@ -1,4 +1,7 @@
 # 概述
 # 初始化
-# Constant
-# Field
+使用make
+使用大括号
+# 不初始化
+直接使用var
+未初始化就使用，会panic
