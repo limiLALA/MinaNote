@@ -14,3 +14,16 @@ M: Machine，系统物理线程，代表着真正执行计算的资源，在绑�
 ## GPM的调度
 用户创建出一个G之后，会优先加入某一个P维护的局部队列
 如果都满了才会加入到全局队列
+
+## 初始化
+从runtime.main执行入口开始
+一开始会初始化g0和m0，由m0执行g0
+生成 gomaxprocs 个 p，每一个p都会有自己的local G 队列
+同时全局也有一个G 队列，保存在runtime.schedt中
+创建完所有的p之后，会把 allp【0】和m0关联起来
+初始化完毕之后，m0就会调用sched函数开始调度
+
+## gopark
+例如使用time.sleep，就会将当前协程的状态从Grunning改成Gwaiting
+然后m会将当前的G放入timer中进行等待，同时调用sched
+超时时间到之后，G会被设置为Grunnable，放入p的本地队列中

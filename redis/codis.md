@@ -17,3 +17,5 @@ codis使用codis-ha对codis proxy集群进行监控，同时也对分片的maste
 
 ## 相关连接
 https://www.cnblogs.com/pingyeaa/p/11294773.html
+https://blog.csdn.net/weixin_41762839/article/details/104829839
+https://blog.csdn.net/QQ1006207580/article/details/103243281
