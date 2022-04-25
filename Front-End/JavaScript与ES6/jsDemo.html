@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JavaScript练习</title>
+</head>
+<body>
+<ul>
+	<li>HTML</li>
+	<li>CSS</li>
+	<li>JavaScript</li>
+</ul>
+<script type="text/javascript">
+	var lis=document.getElementsByTagName("li");
+	console.log(lis);
+	for(let i=0,len=lis.length;i<len;i++){
+		let tmpliHTML;
+		tmpliHTML=lis[i].innerHTML;
+		lis[i].addEventListener('mouseover',function(){
+			lis[i].style.color="red";
+			lis[i].style.fontSize="2em";
+			lis[i].innerHTML+="我是第"+(i+1)+"个";
+		})
+		lis[i].addEventListener('mouseout',function(){
+			lis[i].style.color="black";
+			lis[i].style.fontSize="1em";
+			lis[i].innerHTML=tmpliHTML;
+		})
+	}
+</script>
+</body>
+</html>

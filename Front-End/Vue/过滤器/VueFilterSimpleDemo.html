@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>简单的过滤器</title>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    {{message|capitalize}}<br>
+    {{message|filterA|filterB}}<br>
+    {{message|filter2("+","banana")}}
+  </div>
+</body>
+<script>
+// 注册全局过滤器，每个vue实例挂载的元素中都能使用
+Vue.filter('capitalize', function (value) {
+  if (!value) return ''
+  value = value.toString()
+  return value.charAt(0).toUpperCase() + value.slice(1)
+})
+var vm=new Vue({
+  el:"#app",
+  data:{
+    message:"apple"
+  },
+  filters:{//为单个实例定制过滤器
+    filterA: function(value){
+      return "I like "+value.toLowerCase()
+    },
+    filterB: function(value){
+      return value+'!'
+    },
+    filter2: function(value,a,b){
+      return value+a+b;
+    }
+  }
+})
+</script>
+</html>

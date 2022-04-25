@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <script src="vue.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+    <div id="app">
+            <ul type="square">
+                Filter Key: <input type="text" v-model="key">
+               <li v-for="item in filterShoppingList">{{ item }}</li>
+            </ul>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:'#app',
+        data: {
+            shoppingList: [
+                "Milk", "Donuts", "Cookies", "Chocolate", "Peanut Butter", "Pepto Bismol", "Pepto Bismol (Chocolate flavor)", "Pepto Bismol (Cookie flavor)"
+            ],
+            key: "",
+        },
+        computed: {
+            filterShoppingList: function () {
+                // `this` points to the vm instance
+                var key = this.key;
+                var shoppingList = this.shoppingList;
+                //在使用filter时需要注意的是，前面调用的是需要使用filter的数组，而给filter函数传入的是数组中的每个item，也就是说filter里面的函数，是每个item要去做的，并将每个结果返回。
+                return shoppingList.filter(function (item) {
+                    return item.toLowerCase().indexOf(key.toLowerCase()) != -1;
+                })
+            }
+        }
+    })
+</script>
+</html>

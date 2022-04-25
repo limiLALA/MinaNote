@@ -1,4 +1,20 @@
+
+
+# Python第三方包
+
+```python
+pkgutil.walk_packages(path=__path__, prefix=__name__ + ‘.’)
+```
+递归导入此文件所在文件夹中的包
+
+```python
+for _, modname, ispkg in pkgutil.walk_packages(path=__path__, prefix=__name__ + '.'):
+    if not ispkg:
+        importlib.import_module(modname)
+```
+
 # Python语法
+
 ## 获取list的第一列
 ```Python
 datas = [[1,2],[3,4],[5,6]]
@@ -138,4 +154,4 @@ python --version
 pip list
 ### 查看某第三包信息、版本号
 pip show xxx（xxx，需查看的包名）
-###
+

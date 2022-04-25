@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>element-ui基础学习</title>
+	<!-- 引入el样式 -->
+	<link rel="stylesheet" type="text/css" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<!--            <form>-->
+<!--              <bk-radio-button>switch</bk-radio-button>-->
+<!--              <input placeholder="my input">-->
+<!--            </form>-->
+	<div id='app'>
+		<el-button @click="visible=true">按钮</el-button>
+		<el-dialog :visible.sync="visible" title="Hello Element-ui">
+			<p>这是一个element ui的对话框</p>
+		</el-dialog>
+	</div>
+</body>
+<!-- 先引入vue组件库 -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入el组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script type="text/javascript">
+	new Vue({
+		el:"#app",
+		data:()=>{return {visible:false}}
+	});
+	a=0;
+	var f=function(){a=1;}
+	f();
+	console.log('a',a);
+</script>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>limin的网页</title>
+	<script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css">
+		div {background-color:yellow;}
+		p {color:orange;}
+		span {background-color:blue;color:white;}
+	</style>
+</head>
+<body>
+	<div id="app">
+	  <p>{{ message }}</p>
+	</div>
+	<div id="app2">
+		<span v-bind:title="message">鼠标悬停此处几秒钟查看动态绑定的提示信息</span>
+	</div>
+	<script>
+		var app=new Vue({
+		  el: '#app',
+		  data: {
+		    message: 'Hello Vue.js!'
+		  }
+		})
+		var app2=new Vue({
+			el:'#app2',
+			data:{
+				message:'页面加载于 '+new Date().toLocaleString()
+			}
+		})
+	</script>
+<h1>limin的HTML学习之路</h1>
+<hr/>
+<h2>limin的二级标题</h2>
+<p>limin的第一个段落</p>
+<br/>
+<!-- 这是一个注释 -->
+<img loading="lazy" src="../resources/images/luoxiaohei.jpg" width="400" height="200">
+<hr/>
+
+<h2>HTML文本格式化标签</h2>
+<b>加粗</b>
+<strong>strong加重语气</strong>
+<i>斜体</i>
+<em>em替换斜体</em>
+<small>小号字</small>
+<sub>下标</sub>
+<sup>上标</sup>
+<ins>插入</ins>
+<del>删除</del>
+<hr/>
+
+<h2>HTML "计算机输出" 标签</h2>
+<code>定义计算机代码</code>
+<kbd>定义键盘码</kbd>
+<samp>定义计算机代码样本</samp>
+<var>定义变量</var>
+<pre>定义预格式文本</pre>
+<hr/>
+
+<h2>HTML 引文, 引用, 及标签定义</h2>
+<abbr>定义缩写</abbr>
+<address>定义地址</address>
+<bdo>定义文字方向</bdo>
+<blockquote>定义长的引用</blockquote>
+<q>定义短的引用语</q>
+<cite>定义引用、引证</cite>
+<dfn>定义一个定义项目</dfn>
+<hr/>
+
+<h2>HTML链接</h2>
+<a href="https://www.runoob.com/tags/tag-a.html">HTML <a> 标签</a>
+<br/>
+<a href="https://www.baidu.com" target="_blank" rel="noopener noreferrer">在新窗口打开：百度一下 你就知道</a>
+<br/>
+<a href="https://www.baidu.com" target="_parent" rel="noopener noreferrer">在父窗口打开：百度一下 你就知道</a>
+<br/>
+<a href="https://www.baidu.com" target="_self" rel="noopener noreferrer">默认当前页面跳转：百度一下 你就知道</a>
+<br/>
+<a href="https://www.baidu.com" target="_top" rel="noopener noreferrer">在当前窗体打开链接，并替换当前的整个窗体：百度一下 你就知道</a>
+<br/>
+<a id="tips">有用的提示内容</a>
+<br/>
+<a href="#tips">访问有用的提示内容</a>
+<br/>
+<a href="mailto:liminpeng@tencent.com?Subject=Hello%20limin" target="_top">发送邮件给limin</a>
+</body>
+</html>

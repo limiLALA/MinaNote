@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>第一个Hello Vue程序</title>
+        <script src="https://unpkg.com/vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+        <div id="app">{{message}}</div>
+        <div id="app-2">
+            <span v-bind:title="message">鼠标悬停几秒钟查看此处动态绑定的提示信息！</span>
+        </div>
+        <div id="app-3">
+          <p>{{ message }}</p>
+          <input v-model="message">
+        </div>
+        <div>
+          <template>不在vue实例绑定的元素内部并且不使用vue指令</template>
+        </div>
+        <div id="app-4">
+          <template>在vue实例绑定的元素内部并且不使用vue指令</template>
+          <template v-if="true">
+          <!--此时template标签中的内容显示在页面上，但是看dom结构没有template标签-->
+              <div>我是template</div>
+              <div>我是template</div>
+          </template>
+          <div v-if="true">
+          <!--此时页面上显示div标签中的内容，并且看dom结构存在最外面的div标签-->
+              <div>我是template</div>
+              <div>我是template</div>
+          </div>
+          <!--此处会输出6个‘我是template’并且dom结构中不存在template标签-->
+          <template v-for="a in 3">
+              <div>我是template</div>
+              <div>我是template</div>
+          </template>
+      </div>
+
+      <div id="app-filter">{{message|capitalize}}</div>
+      <div v-bind:id="app-filter-bind">{{message|capitalize}}</div>
+
+        <script type="text/javascript">
+            var app=new Vue({
+                el:'#app',
+                data:{
+                    message:'Hello Vue!'
+                }
+            });
+            var app2=new Vue({
+              el:'#app-2',
+              data: {
+                message:'页面加载于 ' + new Date().toLocaleString()
+              }
+            })
+            var app6 = new Vue({
+              el: '#app-3',
+              data: {
+                message: 'Hello Vue!'
+              }
+            })
+            let vm=new Vue({
+              el: '#app-4',
+            })
+
+            Vue.filter('capitalize', function (value) {
+              if (!value) return ''
+              value = value.toString()
+              return value.charAt(0).toUpperCase() + value.slice(1)
+            })
+            var vm_filter=new Vue({
+              el:'#app-filter',
+              data:{
+                message:'mina',
+              }
+            })
+            var vm_filter_bind=new Vue({
+              el:'#app-filter-bind',
+              data:{
+                message:'happy',
+              }
+            })
+        </script>
+    </body>
+</html>
