@@ -47,7 +47,46 @@
 
 前后端交互时，使用的最基本的工具是ajax，但是ajax无法实时更新数据，采用前端轮询后端的方式开销很大。socket.io可以解决这个问题，后端可以主动推送消息给前端。
 
+```js
+import VueSocketio from 'vue-socket.io'
+import socketio from 'socket.io-client'
+Vue.use(
+  new VueSocketio({
+    connection: socketio.io(process.env.VUE_APP_SOCKET_BASEURL + '/naas', {
+      transports: ['websocket', 'xhr-polling', 'jsonp-polling'],
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            authorization: 'Bearer ' + store.state.user.access_token
+          }
+        }
+      }
+    }),
+    debug: false
+  })
+)
+
+// 组件实例中直接用 this.$socket就可以完成
+
+this.$socket.emit('join', {
+//触发后端事件
+  room: this.robotInfo.robotNo,
+  flow_id: this.workflowListChecked.id,
+  flowVersion: this.workflowListChecked.flowVersion
+})
+
+//监听后端的推送
+this.$socket.on('connect', (data: any) => {})
+this.$socket.on('disconnect', (data: any) => {
+  // this.$socket.connect()
+})
+```
+
+
+
 > [在vue中使用socket.io](https://www.jianshu.com/p/552af264d2ea)
+>
+> [vue中socket的使用](https://blog.csdn.net/aliven1/article/details/122115287)
 
 ## webpack-dev-server
 

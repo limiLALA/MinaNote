@@ -1,0 +1,44 @@
+# Python2
+## 生成全部的3755个常用简体汉字
+
+```python
+import binascii
+chineses = [bytearray.fromhex('%x %x' % (c+0xa0, p+0xa0)) for c in range(16, 56) for p in range(1, 95)]
+print(''.join([str(a) for a in chineses[:-5]]).decode('gb2312'))
+```
+
+# Python3
+
+## 生成全部的3755个常用简体汉字
+
+```python
+# GBK2312收录了6千多常用汉字，这里只生成3755个常用简体汉字
+chineses = [bytearray.fromhex('%x %x' % (c+0xa0, p+0xa0)) for c in range(16, 56) for p in range(1, 95)]
+print(''.join([a.decode('gb2312') for a in chineses[:-5]]))
+```
+
+## 随机生成单个简体汉字
+
+```python
+c = random.randint(16, 55)
+p = random.randint(1, 94)
+if c == 55 and p > 89:  # 要舍弃最后5个非gb2312编码的汉字
+    p = random.randint(1, 89)
+ch = bytearray.fromhex('%x %x' % (c + 0xa0, p + 0xa0)).decode('gb2312')
+```
+
+```python
+# 下面是有问题的写法，会取到生僻字导致gb2312无法解码
+head = random.randint(0xb0, 0xf7)
+body = random.randint(0xa1, 0xfe)
+val = f'{head:x}{body:x}'
+ch = bytes.fromhex(val).decode('gb2312')
+```
+
+## 随机生成unicode码汉字
+
+```python
+# unicode码收录了2万多个汉字,包含很多生僻的繁体字
+ch = chr(random.randint(0x4e00, 0x9fbf))
+```
+

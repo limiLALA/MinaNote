@@ -1,10 +1,146 @@
 # 组件
 
+## Layout 布局（栅格）
+
+通常栅格都是el-row和el-col搭配使用，并且一般是el-row包在最外层
+
+```vue
+<el-row>
+  <el-col :span="8"><div style="background: #99a9bf;"></div></el-col>
+  <el-col :span="8"><div style="background: #d3dce6;"></div></el-col>
+  <el-col :span="8"><div style="background: #e5e9f2;"></div></el-col>
+</el-row>
+```
+
+在不指定每个栅格列宽:span的情况下，直接使用el-row套el-col是达不到栅格el-col高度一致效果的，必须在el-row中指定type="flex"，其中el-col会默认均等分布
+
+```vue
+<el-row type="flex">
+  <el-col><div style="background: #99a9bf;"></div></el-col>
+  <el-col><div style="background: #d3dce6;"></div></el-col>
+  <el-col><div style="background: #e5e9f2;"></div></el-col>
+</el-row>
+```
+
+想在栅格中显示文字，必须指定style中的font-size，否则默认为0，显示不出来。
+
+如果要动态获取样式中的某一项，需要把style后面的内容用大括号包起来，非变量/函数的值都用单引号包起来，如下所示：
+
+```vue
+<template>
+<el-row type="flex">
+  <el-col>
+      <div style="font-size:18px;color:#99a9bf">固定颜色文字</div>
+  </el-col>
+  <el-col>
+      <div :style="{'font-size':'18px','color':getColor(status),'font-weight':'bold','margin-left':'10px','line-height':1}">动态获取字体颜色</div>
+  </el-col>
+</el-row>
+</template>
+<script>
+export default {
+    name: 'Atom',
+    data() {
+        return {
+            status: 1
+        }
+    },
+    methods: {
+        getColor(status) {
+          // 文字颜色
+          if (status === 0) {
+            return '#404040';
+          }
+          if (status === 1) {
+            return '#409eff';
+          }
+          if (status === 2) {
+            return '#67c23a';
+          }
+          if (status === 3) {
+            return '#f56c6c';
+          }
+          return '#bbb';
+        },
+    }
+}
+</script>
+```
+
+如果想要栅格中的内容水平居中，可以在el-col中加上align="middle"
+
+```vue
+<el-row type="flex">
+  <el-col align="middle"><div style="font-size:18px;color:#99a9bf">固定颜色文字</div></el-col>
+</el-row>
+```
+
+如果想要栅格中的内容垂直居中，可以在el-row中加上align="middle"
+
+```vue
+<el-row type="flex" align="middle">
+  <el-col><div style="font-size:18px;color:#99a9bf">固定颜色文字</div></el-col>
+</el-row>
+```
+
+> [Vue e-row、el-col高度一致且内容居中](https://www.jianshu.com/p/5e2a475b6b5f)
+
 ## Form表单
 
 hide-required-asterisk:是否隐藏必填字段的标签旁边的红色星号
 
-[el-form表单验证的trigger类型](https://www.cnblogs.com/weibo258/p/14356307.html)
+### 修改默认表单项间距和label的字体
+
+css中增加
+
+```css
+.el-form {
+    .el-form-item {
+        margin-bottom: 10px;
+    }
+    .el-form-item__label {
+        font-size: 14px;
+        font-weight:bold;
+        color: #606266;
+    }
+}
+```
+
+### Form表单不换行
+
+css中添加
+
+```css
+.el-form {
+	white-space: nowrap;
+}
+```
+
+### el-form的label自适应宽度并左对齐
+
+在el-form中赋予label-width="auto"后，label就会自适应标签的长度，但会默认右对齐(此时使用label-position="left"也无法改变对其方式)
+
+element中是通过
+
+```css
+.el-form-item__label-wrap{ float: left; }
+```
+
+将label向左漂之后，通过填补margin-left实现右对齐，所以想让label自适应之后**左对齐**，只需要将**margin-left**设置为**0px**即可。
+
+```css
+.el-form-item__label-wrap {
+  margin-left: 0px !important;
+}
+```
+
+另外：如果**label-width**是设定了**固定值**，那么可以通过**labe-position**直接设置label**标签的对齐方式**
+
+> [el-form表单验证的trigger类型](https://www.cnblogs.com/weibo258/p/14356307.html)
+>
+> [修改ElementUI默认表单项el-form-item间距](https://blog.csdn.net/qq_35462323/article/details/123084943?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-123084943-blog-122236935.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-123084943-blog-122236935.pc_relevant_default&utm_relevant_index=1)
+>
+> [修改el-form表单的el-form-item的label的字体大小以及修改el-row中的el-col的高度](http://t.zoukankan.com/pzw23-p-13581598.html)
 
 ## table表格
 当el-table元素中的data注入对象数组后，el-table-column中用prop属性对应对象的键名即可填入数据，label用来定义展示出来的列名，width定义列宽。
@@ -32,8 +168,218 @@ hide-required-asterisk:是否隐藏必填字段的标签旁边的红色星号
 show-overflow-tooltip：当内容过长被隐藏时显示 tooltip
 >[Table 表格](https://element.eleme.cn/#/zh-CN/component/table)
 
+### 进阶个性化用法
+
+##### 修改表头、列的背景颜色、字体样式
+
+###### [全表头修改](https://wenku.baidu.com/view/b7dd6c4a26c52cc58bd63186bceb19e8b8f6ec95.html)
+
+`header-cell-style`是**表头**单元格的 style 的回调⽅法，下面直接在el-table中使用这个属性
+
+```
+<el-table :header-cell-style="{background:'#eef1f6',color:'#606266'}">
+...
+</el-table>
+```
+
+###### [针对部分单元格修改](https://blog.csdn.net/Dax1_/article/details/119739781)
+
+`cell-style`是**数据**单元格的 style 的回调⽅法，可通过指定对应的method的方式实现部分列的背景颜色和字体颜色修改
+
+html部分：
+
+```html
+<script src="//unpkg.com/vue/dist/vue.js"></script>
+<script src="//unpkg.com/element-ui@2.4.11/lib/index.js"></script>
+<div id="app">
+<template>
+    <el-table :data="tableData" 
+    			:cell-style="cellStyle" 
+    			border style="width: 100%">
+      <el-table-column prop="date" label="日期" width="180">
+      </el-table-column>
+      <el-table-column prop="name" label="姓名" width="180">
+      </el-table-column>
+      <el-table-column prop="address" label="地址">
+      </el-table-column>
+    </el-table>
+  </template>
+</div>
+```
+
+js部分：
+
+```js
+var Main = {
+      data() {
+        return {
+          tableData: [{
+            date: '2016-05-02',
+            name: '王小虎1',
+            address: '上海市普陀区金沙江路 1518 弄'
+          },{
+            date: '2016-05-02',
+            name: '王小虎1',
+            address: '上海市普陀区金沙江路 1519 弄'
+          }, {
+            date: '2016-05-04',
+            name: '王小虎2',
+            address: '上海市普陀区金沙江路 1517 弄'
+          },{
+            date: '2016-05-02',
+            name: '王小虎1',
+            address: '上海市普陀区金沙江路 1522 弄'
+          }]
+        }
+      },
+      methods: {
+      	cellStyle({row, column, rowIndex, columnIndex}){
+        	if(column.property === 'name'){
+          	switch(row.name) {
+            	case '王小虎1':
+              	return {
+                	background: 'red',
+                  color: '#FFFFFF'
+                }
+              	break
+              case '王小虎2':
+              	return {
+                	background: 'blue',
+                  color: '#FFFFFF'
+                }
+              	break
+            }
+          }
+        }
+      }
+    }
+var Ctor = Vue.extend(Main)
+new Ctor().$mount('#app')
+```
+
+###### 针对行修改
+
+`row-style`是**数据行**的 style 的回调⽅法
+
+#### 行内详情查看（类似collapse折叠面板）
+
+增加一列并给el-table-column组件指定type="expand"即可，然后在组件内放要展示的详情
+
+```html
+<el-table ref='table' :data="tableData" @row-click="rowClick">
+    <!-- ⾏内展开展⽰⾏（⾏内展开必填） -->
+    <el-table-column type="expand" label="详情">
+        <!-- 作⽤域插槽，获取当前⾏数据 -->
+        <template slot-scope="{row}">
+            <div>我是详情</div>
+        </template>
+    </el-table-column>
+</el-table>
+```
+
+#### 清空selection已经选择的数据
+
+el-table中如果存在type="selection"的列，当选择完并做提交/数据更新/翻页操作后，原来选择的项不会被清空，这里在用户理解上是不合理的，需要进行下面2步操作实现清空
+
+1、在`el-table` 标签加上`ref="materialTable"`
+2、在你需要清空的时候加上以下代码
+
+```js
+this.$refs.materialTable.clearSelection();
+```
+
+> [element-UI+Vue:el-table的selection已经选择的数据，翻页不清空 + 清除table选择数据](https://blog.csdn.net/weixin_46099269/article/details/111225391)
+
+#### 设置默认选中selection
+
+> [vue+elementui实现表格默认选中(el-table)](https://blog.csdn.net/weixin_46038888/article/details/124172624)
+
+#### 去掉表格边框线
+
+下边框样式
+
+```stylus
+.el-table::before {
+  height: 0px;
+}
+```
+
+右边框线
+
+```stylus
+.el-table--border::after {
+  width: 0px;
+}
+```
+
+左和上的
+
+```stylus
+.el-table--border {
+  border: none;
+}
+```
+
+> [el-table去掉最外层的边框线](http://t.zoukankan.com/pzw23-p-14302237.html)
+
+#### 去掉表格内部分割线
+
+```stylus
+.el-table {
+    tr th,
+    tr td {
+        border-top: none;
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+    }
+}
+```
+
+> [一文图解自定义修改el-table样式](https://blog.csdn.net/weixin_48337566/article/details/123340499)
+
+#### 设置单元格（el-table-column）保留空格和换行
+
+在使用 el-table 展示数据时，单元格中的数据有可能存在空格和换行符，若不进行设置，浏览器默认会取消空格和换行符
+
+```vue
+ <style>
+   .el-table .cell.el-tooltip {
+       white-space: pre-wrap;
+   }
+ </style>
+```
+
+“white-space” 属性常见的配置对应的释义如下所示：
+
+| 配置项   | 释义                                                         |
+| -------- | ------------------------------------------------------------ |
+| normal   | 默认。连续的空白符会被合并，换行符会被当作空白符来处理。换行在填充「行框盒子 (line boxes)」时是必要。 |
+| pre      | 空白会被浏览器保留。其行为方式类似 HTML 中的<pre> 标签。     |
+| nowrap   | 和 `normal` 一样，连续的空白符会被合并。但文本内的换行无效，直到遇到\<br\>标签为止。 |
+| pre-wrap | 保留空白符序列，且正常地进行换行。                           |
+| pre-line | 合并空白符序列，但是保留换行符。                             |
+| inherit  | 规定应该从父元素继承 white-space 属性的值。                  |
+
+> [Elelemt-UI el-table 接收后端返回换行符 /n 不生效](https://blog.csdn.net/lhban108/article/details/125601824)
+
+#### el-table表格控件表头与内容列不对齐问题
+
+将以下样式代码添加到app.vue中（必须是入口文件，起全局作用！）
+
+```css
+body .el-table th.gutter{
+	display: table-cell!important;
+}
+```
+
+> [el-table表格控件表头与内容列不对齐问题](https://www.jianshu.com/p/a3f4b82a16ac?u_atoken=a4f2ba53-48df-400d-9a42-1a77859d5b6a&u_asession=01eY3LM4f8x8UA-5TAR4Vx4rYrgJKTT1Zys5gCOd-awsi419FKN6KjlV_UFwNngIWpX0KNBwm7Lovlpxjd_P_q4JsKWYrT3W_NKPr8w6oU7K8A3pTJMziFbXMDWPd58cRdnHmbkqVcEgdObpAroqY1_GBkFo3NEHBv0PZUm6pbxQU&u_asig=05qQYhRevD29F9Yl3kQGqbE0IpEbfp8T_WfCCsEHlSYuayVKsWDfDjL3p9i2lxBFsCud52xciU5ciumMqKtXJ2Hyns86vrXCDRf80TD13YOP2SC-r-rMbq5uBP940a5u2egxlPnJ6tHIv_g32B0SkdymMr5178h6-atLteHb8s8Ur9JS7q8ZD7Xtz2Ly-b0kmuyAKRFSVJkkdwVUnyHAIJzTi9zgoJlNW0yBH28fffKboW872Q58OJN498FirWIlnH6xbSxAaWh9ph0bRUFW-6vO3h9VXwMyh6PgyDIVSG1W8pull1I08jE7EJ3vUPdKMLSGGhLzPyvHy4oNvsNvjA3xA_y6Gj2lrlsJKCKmIRC9k6Xcg1AyQUW7j2LbHqh3lqmWspDxyAEEo4kbsryBKb9Q&u_aref=tcJ0W9QYCuP77V%2FNPXhdH%2BSSrPo%3D)
+
 ## Progress 进度条
+
 设置percentage属性即可，表示进度条对应的百分比，必填，必须在 0-100。通过 format 属性来指定进度条文字内容。通过 stroke-width 属性更改进度条的高度，并可通过 text-inside 属性来将进度条描述置于进度条内部。
+
+> [Element UI 自定义环形进度条里的内容](https://blog.csdn.net/weixin_41192489/article/details/110874362)
 
 ## Collapse折叠面板
 通过折叠面板收纳内容区域
@@ -224,6 +570,76 @@ export default {
 
 ## CheckBox多选框
 
+### 勾选项绑定值与实际显示标签不同
+
+在el-checkbox-group组件中使用v-model绑定用来存储选择项的数组变量
+
+在el-checkbox中使用:label来指定最终存储到v-model中的数据，而:key和:value在这里不起任何有效作用
+
+而:key和:value在这里不起任何有效作用
+
+```vue
+<el-checkbox-group v-model="testTools.query.tool_ids">
+    <el-checkbox
+                 v-for="(testTool, index) in testTools.data"
+                 :key="index"
+                 :label="testTool.id"
+                 :value="testTool.name"
+    >
+        {{ testTool.name }}
+    </el-checkbox>
+</el-checkbox-group>
+```
+
+如果使用纯闭合标签，则显示在复选框后面的文字就是:label指定的数据
+
+```vue
+<el-checkbox-group v-model="testTools.query.tool_ids">
+    <el-checkbox
+                 v-for="testTool in testTools.data"
+                 :label="testTool.id"  // 显示的是id而不是name
+    />
+</el-checkbox-group>
+```
+
+### [el-checkbox 点击Label不改变复选框的选中状态](https://www.itxm.cn/post/28198.html)
+
+```vue
+<el-checkbox
+  :label="toolRun.id"
+  style="font-weight:bold;"
+>
+  {{ toolRun.name }}
+</el-checkbox>
+```
+
+背景：上述代码中，标签文字部分点击一定会触发事件勾选/取消勾选，但有时候我们不想要这么大的响应范围，只要点击勾选框来触发事件，应该怎么做呢？
+
+思路：自己使用span渲染展示标签然后通过click事件的修饰符[prevent]阻止默认事件
+
+```vue
+<el-checkbox
+  :label="toolRun.id"
+  style="font-weight:bold;"
+>
+  <span @click.prevent>{{ toolRun.name }}</span>
+</el-checkbox>
+```
+
+还有一种方法是把要展示的文字部分放在el-checkbox之外（注意，el-checkbox中间一定要有个占位符，如空格，否则会显示toolRun.id）
+
+```vue
+<el-checkbox
+  :label="toolRun.id"
+  class="my-checkbox"
+>
+    {{ }}
+</el-checkbox>
+<span style="font-weight:bold;">
+    {{ toolRun.name }}
+</span>
+```
+
 ### 样式调整
 
 #### 加粗label里面的文字部分
@@ -260,6 +676,34 @@ export default {
 `注意button的style中的margin-right表示在按钮外部的右侧增加空白填充，而使用padding的话就会变成按钮内部填充，会影响按钮本身的形状`
 
 ## Switch开关
+
+## tab标签页
+
+在使用el-tabs时，如果要使用v-model自定义绑定变量，那么el-tab-pane中就必须指定name属性（**必须为字符串类型**），表示当前tab-pane的名称，如果这个tab-pane被选中，则会更新v-model绑定值为这个name。
+
+如果不指定v-model，只指定了el-tab-pane的label，官方底层默认的v-model是有问题的，在切换tab的时候不会触发兄弟组件内的子组件重新渲染，然后就会导致只有第一个tab显示正常，其他tab渲染异常的问题。
+
+比如tab-pane中包了el-form，并设置了`label-width="auto"`，但是只有第一个tab的表单标签是正常右侧对齐（`.el-form-item__label-wrap`有设置`margin-left`）、输入框全部左对齐的（`.el-form-item__content`有设置`margin-left`），其他tab的标签都变成了左对齐（`.el-form-item__label-wrap`的`margin-left`没有了），并且输入框也没有左对齐了（`.el-form-item__content`的`margin-left`变少了），变成了参差不齐TAT
+
+这里底层是为什么还不得而知，后面有时间再仔细研究下。目前看tab 的切换是 display 的属性切换，猜测v-model可以触发重新computed的事件，但是el-tabs内置的操作就没有触发，兄弟组件传值没有监听到值变化。
+
+总之一定要加上v-model，自己指定tab绑定值。
+
+> [vue-el-tabs一些常见坑](http://www.manongjc.com/detail/25-sulwmmkjqxoypsa.html)
+
+## Link链接
+
+默认是在当前页面跳转，如果要新开标签页跳转，需要加上`target="_blank"`
+
+```vue
+<el-link
+    href="https://www.baidu.com/"
+    target="_blank"
+    type="primary"
+>
+    百度一下
+</el-link>
+```
 
 # 组件嵌套使用
 

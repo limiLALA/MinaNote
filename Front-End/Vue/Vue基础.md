@@ -159,6 +159,10 @@ watch:{
 ### 声明组件：Vue.component
 ### 过渡效果组件：transition
 
+## vue打包后的运行
+
+> [Vue项目build打包后如何运行](https://blog.csdn.net/weixin_42608885/article/details/121065519)
+
 
 # Vue原理
 ## 第一个Hello Vue代码详解

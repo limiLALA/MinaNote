@@ -199,7 +199,12 @@ var a="Hello JavaScript".map(function(x){return x.charCodeAt(0);});
 ```
 
 ## JSON字符串转成map解析
+
 >[JSON字符串转成map解析](https://blog.csdn.net/qq_15700115/article/details/89333016?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control)
+
+## JS中的空值判断与`!`否定运算符
+
+在JS中，`undefined`、`null`、`''`在`if`条件中都被认为是`false`，但是空列表`[]`却会被认为是`true`，所以`![]`的结果其实是false
 
 # JS Array.slice 截取数组
 
